@@ -1,7 +1,6 @@
 package br.imd.model;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,34 +43,30 @@ public class Dataset {
 		this.datasetLocation = datasetLocation;
 	}
 	
-	public void readData() {
+	public void readData() throws IOException{
 		FileReader file = null;
 		String row;
 		String[] data;
-		float[] atributes = new float[1000];
 		
-		try {
-			file = new FileReader(datasetLocation);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		file = new FileReader(datasetLocation);
+		
 			
 		BufferedReader dataReader = new BufferedReader(file);
-			
-		try {
-			dataReader.readLine();
+		
+		dataReader.readLine();
 				
-			while((row = dataReader.readLine()) != null) {
-				data = row.split(",");
-					
-				for(int i = 0; i < 1000; i++) {
-					atributes[i] = Float.parseFloat(data[i]);
-				}
-					
-				dataset.add(new ImageInstance(data[1000], atributes));
+		while((row = dataReader.readLine()) != null) {
+			data = row.split(",");
+			float[] atributes = new float[1000];
+			
+			for(int i = 0; i < 1000; i++) {
+				atributes[i] = Float.parseFloat(data[i]);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			
+			dataset.add(new ImageInstance(data[1000], atributes));
+			
 		}
+		
+		dataReader.close();
 	}
 }
