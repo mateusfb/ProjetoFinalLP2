@@ -2,11 +2,12 @@ package br.imd.model;
 
 import java.util.Arrays;
 
-public class Operations {
+public class DatasetOp {
 
 	private Dataset dataset;
+	private static final int K = 17;
 	
-	public Operations(Dataset dataset){
+	public DatasetOp(Dataset dataset){
 		this.dataset = dataset;
 	}
 	
@@ -21,7 +22,7 @@ public class Operations {
 	}
 	
 	public boolean isPerson(float[] imgAtributes) {
-		int[] minIndex = new int[17];
+		int[] minIndex = new int[K];
 		double[] distances = new double[100];
 		double maxDistance = 0;
 		int personCount = 0;
@@ -36,7 +37,7 @@ public class Operations {
 		System.out.println(maxDistance);
 		System.out.println(Arrays.toString(distances));
 		
-		for(int i = 0; i < 17; i++) {
+		for(int i = 0; i < K; i++) {
 			minIndex[i] = FindMinimumIndex(distances);
 			distances[minIndex[i]] = maxDistance;
 			
@@ -48,8 +49,9 @@ public class Operations {
 		}
 		
 		System.out.println(Arrays.toString(minIndex));
+		System.out.println(Math.floor(K/2));
 		
-		if(personCount > 8) {
+		if(personCount > Math.floor(K/2)) {
 			return true;
 		}
 		
