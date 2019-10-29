@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class DatasetOp {
 
 	private Dataset dataset;
-	private static final int K = 17;
+	private static final int K = 25;
 	
 	public DatasetOp(Dataset dataset){
 		this.dataset = dataset;
@@ -14,11 +14,21 @@ public class DatasetOp {
 	public double euclideanD(float[] p1, float[] p2) {
 		double sum = 0;
 		
-		for(int i = 0; i < 100; i++) {
+		for(int i = 0; i < p2.length; i++) {
 			sum += Math.pow((p1[i] - p2[i]), 2);
 		}
 		
 		return Math.sqrt(sum);
+	}
+	
+	public double chebyshevD(float[] p1, float[] p2) {
+		double ds = 0;
+		
+		for(int i = 0; i < p2.length; i++) {
+			ds = Math.max(ds, Math.abs(p1[i]-p2[i]));
+		} 
+		
+		return ds;
 	}
 	
 	public boolean isPerson(float[] imgAtributes) {
@@ -49,7 +59,6 @@ public class DatasetOp {
 		}
 		
 		System.out.println(Arrays.toString(minIndex));
-		System.out.println(Math.floor(K/2));
 		
 		if(personCount > Math.floor(K/2)) {
 			return true;

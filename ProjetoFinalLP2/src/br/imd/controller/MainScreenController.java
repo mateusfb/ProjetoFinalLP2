@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -37,10 +38,13 @@ public class MainScreenController {
 
     @FXML
     private ImageView image;
+    
+    @FXML
+    private Label labelSC;
 
     @FXML
     void detect(ActionEvent event) {
-    	if(imgPath != "null") {
+    	if(imgPath != null) {
     		HogExtractor hog = new HogExtractor(imgPath);
     		float[] imgAtributes = hog.extract();
     		
@@ -61,6 +65,7 @@ public class MainScreenController {
     	if(selectedFile != null) {
     		image.setImage(new Image(selectedFile.toURI().toString()));
     		imgPath = selectedFile.getAbsolutePath();
+    		labelSC.setText(null);
     	} else {
     		
     	}
@@ -82,7 +87,7 @@ public class MainScreenController {
 		}
         
         datasetOp = new DatasetOp(dataset);
-        imgPath = "null";
+        imgPath = null;
         
     }
 }
