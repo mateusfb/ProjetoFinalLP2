@@ -34,8 +34,11 @@ public class MainScreenController {
     private Button detect;
 
     @FXML
-    private Circle result;
+    private Circle greenLight;
 
+    @FXML
+    private Circle redLight;
+    
     @FXML
     private ImageView image;
     
@@ -49,9 +52,11 @@ public class MainScreenController {
     		float[] imgAtributes = hog.extract();
     		
     		if(datasetOp.isPerson(imgAtributes)) {
-    			result.setFill(Color.GREEN);
+    			greenLight.setFill(Color.GREEN);
+    			redLight.setFill(Color.GRAY);
     		} else {
-    			result.setFill(Color.RED);
+    			redLight.setFill(Color.RED);
+    			greenLight.setFill(Color.GRAY);
     		}
     	}
     }
@@ -73,11 +78,6 @@ public class MainScreenController {
 
     @FXML
     void initialize() {
-        assert selectImage != null : "fx:id=\"selectImage\" was not injected: check your FXML file 'TelaPrincipal.fxml'.";
-        assert detect != null : "fx:id=\"detect\" was not injected: check your FXML file 'TelaPrincipal.fxml'.";
-        assert result != null : "fx:id=\"result\" was not injected: check your FXML file 'TelaPrincipal.fxml'.";
-        assert image != null : "fx:id=\"image\" was not injected: check your FXML file 'TelaPrincipal.fxml'.";
-
         Dataset dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv");
         
         try {
@@ -88,6 +88,9 @@ public class MainScreenController {
         
         datasetOp = new DatasetOp(dataset);
         imgPath = null;
+        
+        redLight.setFill(Color.GRAY);
+        greenLight.setFill(Color.GRAY);
         
     }
 }
