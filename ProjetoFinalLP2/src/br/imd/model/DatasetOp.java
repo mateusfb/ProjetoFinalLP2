@@ -5,10 +5,16 @@ import java.util.Arrays;
 public class DatasetOp {
 
 	private Dataset dataset;
-	private static final int K = 25;
+	private String distance;
+	private static final int K = 11;
 	
 	public DatasetOp(Dataset dataset){
 		this.dataset = dataset;
+		this.distance = "Euclidiana";
+	}
+	
+	public void setDistance(String distance) {
+		this.distance = distance;
 	}
 	
 	public double euclideanD(float[] p1, float[] p2) {
@@ -19,6 +25,16 @@ public class DatasetOp {
 		}
 		
 		return Math.sqrt(sum);
+	}
+	
+	public double manhattanD(float[] p1, float[] p2) {
+		double ds = 0;
+		
+		for(int i = 0; i < p2.length; i++) {
+			ds += Math.abs(p1[i] - p2[i]);
+		}
+		
+		return ds;
 	}
 	
 	public double chebyshevD(float[] p1, float[] p2) {
@@ -38,7 +54,17 @@ public class DatasetOp {
 		int personCount = 0;
 		
 		for(int i = 0; i < 100; i++) {
-			distances[i] = euclideanD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+			switch(this.distance){
+				case "Euclidiana":
+					distances[i] = euclideanD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					break;
+				case "Manhattan":
+					distances[i] = manhattanD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					break;
+				case "Chebyshev":
+					distances[i] = chebyshevD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					break;
+			}
 			if(distances[i] > maxDistance) {
 				maxDistance = distances[i];
 			}
@@ -53,7 +79,7 @@ public class DatasetOp {
 			
 			System.out.println(dataset.getDataset().get(minIndex[i]).getLabel());
 			
-			if(dataset.getDataset().get(minIndex[i]).getLabel().equals("\"person\"")) {
+			if(dataset.getDataset().get(minIndex[i]).getLabel().equals("person")) {
 				personCount++;
 			}
 		}

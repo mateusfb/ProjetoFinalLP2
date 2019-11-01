@@ -1,5 +1,6 @@
 package br.imd.controller;
 
+import br.imd.Detector;
 import br.imd.model.*;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class MainScreenController {
 	
 	private DatasetOp datasetOp;
 	private String imgPath;
+	private Detector main;
 	
     @FXML
     private ResourceBundle resources;
@@ -44,6 +46,14 @@ public class MainScreenController {
     
     @FXML
     private Label labelSC;
+    
+    public DatasetOp getDatasetOp() {
+    	return datasetOp;
+    }
+    
+    public void setMainApp(Detector main) {
+    	this.main = main;
+    }
 
     @FXML
     void detect(ActionEvent event) {
@@ -75,6 +85,16 @@ public class MainScreenController {
     		
     	}
     }
+    
+    @FXML
+    void openSettings(ActionEvent event) {
+    	try {
+			main.settings();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
     @FXML
     void initialize() {
@@ -88,9 +108,6 @@ public class MainScreenController {
         
         datasetOp = new DatasetOp(dataset);
         imgPath = null;
-        
-        redLight.setFill(Color.GRAY);
-        greenLight.setFill(Color.GRAY);
         
     }
 }

@@ -20,8 +20,8 @@
       <Label fx:id="labelSC" layoutX="444.0" layoutY="124.0" text="Selecione uma imagem" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="200.0" layoutX="187.0" layoutY="186.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="167.0" layoutX="143.0" layoutY="77.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" width="96.0" />
-      <Circle fx:id="greenLight" fill="#012400" layoutX="191.0" layoutY="120.0" radius="30.0" stroke="#545454" strokeType="INSIDE" strokeWidth="3.0" />
-      <Circle fx:id="redLight" fill="#570300" layoutX="191.0" layoutY="191.0" radius="30.0" stroke="#575757" strokeType="INSIDE" strokeWidth="3.0" />
+      <Circle fx:id="greenLight" fill="GRAY" layoutX="191.0" layoutY="120.0" radius="30.0" stroke="#545454" strokeType="INSIDE" strokeWidth="3.0" />
+      <Circle fx:id="redLight" fill="GRAY" layoutX="191.0" layoutY="191.0" radius="30.0" stroke="#575757" strokeType="INSIDE" strokeWidth="3.0" />
       <Separator layoutX="378.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="480.0" prefWidth="7.0" />
       <Polygon layoutX="191.0" layoutY="396.0" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" scaleX="0.3" scaleY="0.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="640.0">
@@ -38,7 +38,7 @@
             </Menu>
           <Menu mnemonicParsing="false" text="Configurações">
             <items>
-              <MenuItem mnemonicParsing="false" text="Preferências" />
+              <MenuItem mnemonicParsing="false" onAction="#openSettings" text="Preferências" />
             </items>
           </Menu>
         </menus>
