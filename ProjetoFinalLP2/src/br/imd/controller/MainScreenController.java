@@ -2,23 +2,34 @@ package br.imd.controller;
 
 import br.imd.Detector;
 import br.imd.model.*;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.videoio.VideoCapture;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 
 public class MainScreenController {
 	
+	private Dataset dataset;
 	private DatasetOp datasetOp;
 	private String imgPath;
 	private Detector main;
@@ -29,6 +40,9 @@ public class MainScreenController {
     @FXML
     private URL location;
 
+    @FXML
+    private Button imgCapture;
+    
     @FXML
     private Button selectImage;
 
@@ -70,6 +84,36 @@ public class MainScreenController {
     		}
     	}
     }
+    
+    @FXML
+    void capture(ActionEvent event) {
+    	VideoCapture capture = new VideoCapture(0);
+    	WritableImage writableImage = null;
+    	
+    	Mat matrix = new Mat();
+    	capture.read(matrix);
+    	
+    	if(capture.isOpened()) {
+    		if(capture.read(matrix)) {
+    			BufferedImage image = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
+    			
+    			 WritableRaster raster = image.getRaster();
+    	         DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
+    	         byte[] data = dataBuffer.getData();
+    	         matrix.get(0, 0, data);
+    	         
+    	         writableImage = SwingFXUtils.toFXImage(image, null);
+    	     }
+    	}
+    	
+    	String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\capture.png";
+    	Imgcodecs.imwrite(saveLocation, matrix);
+    	image.setImage(writableImage);
+    	imgPath = saveLocation;	
+		labelSC.setText(null);
+		
+		capture.release();
+    }
 
     @FXML
     void selectImage(ActionEvent event) {
@@ -98,7 +142,7 @@ public class MainScreenController {
 
     @FXML
     void initialize() {
-        Dataset dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv");
+        dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv");
         
         try {
 			dataset.readData();

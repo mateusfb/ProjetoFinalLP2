@@ -1,5 +1,7 @@
 package br.imd.model;
 
+import java.io.File;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.Size;
@@ -37,6 +39,10 @@ public class HogExtractor {
 		Imgproc.resize(img, img, new Size(64, 128), 0.5, 0.5, Imgproc.INTER_LINEAR);
 		hog.compute(img, features);
 		float[] arrayOfFeatures = features.toArray();
+		
+		String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\modified.png";
+    	Imgcodecs.imwrite(saveLocation, img);
+		
 		return arrayOfFeatures;
 	}
 }

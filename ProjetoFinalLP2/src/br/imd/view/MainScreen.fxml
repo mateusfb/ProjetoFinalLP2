@@ -43,5 +43,6 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Button fx:id="imgCapture" layoutX="451.0" layoutY="267.0" mnemonicParsing="false" onAction="#capture" text="Capturar imagem" />
    </children>
 </Pane>

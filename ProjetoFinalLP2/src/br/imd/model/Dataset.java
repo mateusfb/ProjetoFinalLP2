@@ -23,13 +23,6 @@ public class Dataset {
 	}
 
 	/**
-	 * @param dataset the dataset to set
-	 */
-	public void setDataset(ArrayList<ImageInstance> dataset) {
-		this.dataset = dataset;
-	}
-
-	/**
 	 * @return the datasetLocation
 	 */
 	public String getDatasetLocation() {
@@ -41,6 +34,11 @@ public class Dataset {
 	 */
 	public void setDatasetLocation(String datasetLocation) {
 		this.datasetLocation = datasetLocation;
+		try {
+			this.readData();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void readData() throws IOException{

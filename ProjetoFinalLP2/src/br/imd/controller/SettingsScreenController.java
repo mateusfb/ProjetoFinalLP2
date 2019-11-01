@@ -5,19 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
 public class SettingsScreenController {
 
 	private Detector main;
 	
-    @FXML
-    private TextField datasetLocation;
-
-    @FXML
-    private Button browseDs;
-
     @FXML
     private RadioButton euclidianCb;
 
@@ -43,10 +36,4 @@ public class SettingsScreenController {
     	
     	main.getMSController().getDatasetOp().setDistance(distance.getText());
     }
-
-    @FXML
-    void browse(ActionEvent event) {
-
-    }
-
 }
