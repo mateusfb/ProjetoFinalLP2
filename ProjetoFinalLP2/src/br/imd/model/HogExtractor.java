@@ -17,16 +17,10 @@ public class HogExtractor {
 		this.imgLocation = imgLocation;
 	}	
 
-	/**
-	 * @return the imgLocation
-	 */
 	public String getImgLocation() {
 		return imgLocation;
 	}
 
-	/**
-	 * @param imgLocation the imgLocation to set
-	 */
 	public void setImgLocation(String imgLocation) {
 		this.imgLocation = imgLocation;
 	}

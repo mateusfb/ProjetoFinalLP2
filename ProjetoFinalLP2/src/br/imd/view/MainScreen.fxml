@@ -26,9 +26,10 @@
       <Polygon layoutX="191.0" layoutY="396.0" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" scaleX="0.3" scaleY="0.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="640.0">
         <menus>
-          <Menu mnemonicParsing="false" onAction="#selectImage" text="Arquivo">
+          <Menu mnemonicParsing="false" text="Arquivo">
             <items>
-              <MenuItem mnemonicParsing="false" text="Carregar imagem" />
+              <MenuItem mnemonicParsing="false" onAction="#selectImage" text="Carregar imagem" />
+                  <MenuItem mnemonicParsing="false" onAction="#capture" text="Capturar imagem" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Editar">

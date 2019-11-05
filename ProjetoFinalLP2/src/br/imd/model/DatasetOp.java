@@ -6,7 +6,7 @@ public class DatasetOp {
 
 	private Dataset dataset;
 	private String distance;
-	private static final int K = 11;
+	private int K = 11;
 	
 	public DatasetOp(Dataset dataset){
 		this.dataset = dataset;
@@ -15,6 +15,10 @@ public class DatasetOp {
 	
 	public void setDistance(String distance) {
 		this.distance = distance;
+	}
+	
+	public void setK(int k) {
+		this.K = k;
 	}
 	
 	public double euclideanD(float[] p1, float[] p2) {
