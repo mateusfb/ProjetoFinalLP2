@@ -6,19 +6,24 @@ public class DatasetOp {
 
 	private Dataset dataset;
 	private String distance;
-	private int K = 11;
+	private int k;
 	
 	public DatasetOp(Dataset dataset){
 		this.dataset = dataset;
 		this.distance = "Euclidiana";
+		this.k = 5;
 	}
 	
 	public void setDistance(String distance) {
 		this.distance = distance;
 	}
 	
+	public int getK() {
+		return this.k;
+	}
+	
 	public void setK(int k) {
-		this.K = k;
+		this.k = k;
 	}
 	
 	public double euclideanD(float[] p1, float[] p2) {
@@ -52,7 +57,7 @@ public class DatasetOp {
 	}
 	
 	public boolean isPerson(float[] imgAtributes) {
-		int[] minIndex = new int[K];
+		int[] minIndex = new int[k];
 		double[] distances = new double[100];
 		double maxDistance = 0;
 		int personCount = 0;
@@ -77,7 +82,7 @@ public class DatasetOp {
 		System.out.println(maxDistance);
 		System.out.println(Arrays.toString(distances));
 		
-		for(int i = 0; i < K; i++) {
+		for(int i = 0; i < k; i++) {
 			minIndex[i] = FindMinimumIndex(distances);
 			distances[minIndex[i]] = maxDistance;
 			
@@ -90,7 +95,7 @@ public class DatasetOp {
 		
 		System.out.println(Arrays.toString(minIndex));
 		
-		if(personCount > Math.floor(K/2)) {
+		if(personCount > Math.floor(k/2)) {
 			return true;
 		}
 		

@@ -9,17 +9,24 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -29,6 +36,7 @@ import javafx.stage.FileChooser;
 
 public class MainScreenController {
 	
+	private volatile boolean isCapturing;
 	private Dataset dataset;
 	private DatasetOp datasetOp;
 	private String imgPath;
@@ -60,6 +68,24 @@ public class MainScreenController {
     
     @FXML
     private Label labelSC;
+    
+    @FXML
+    private ComboBox<Integer> minuteCb;
+
+    @FXML
+    private Button startButton;
+
+    @FXML
+    private Button stopButton;
+    
+    @FXML
+    private Menu fileMenu;
+
+    @FXML
+    private Menu editMenu;
+
+    @FXML
+    private Menu settingsMenu;
     
     public DatasetOp getDatasetOp() {
     	return datasetOp;
@@ -95,24 +121,27 @@ public class MainScreenController {
     	
     	if(capture.isOpened()) {
     		if(capture.read(matrix)) {
-    			BufferedImage image = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
+    			BufferedImage bufferedImage = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
     			
-    			 WritableRaster raster = image.getRaster();
-    	         DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
-    	         byte[] data = dataBuffer.getData();
-    	         matrix.get(0, 0, data);
-    	         
-    	         writableImage = SwingFXUtils.toFXImage(image, null);
+    			WritableRaster raster = bufferedImage.getRaster();
+    			DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
+    	        byte[] data = dataBuffer.getData();
+    	        matrix.get(0, 0, data);
+    	       
+    	 		writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
+    	        
+    	        String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\capture.png";
+    	     	Imgcodecs.imwrite(saveLocation, matrix);
+    	     	image.setImage(writableImage);
+    	     	imgPath = saveLocation;	
+    	 		labelSC.setText(null);
+
+    	 		capture.release();
     	     }
+    	} else {
+    		Alert alert = new Alert(AlertType.ERROR, "Não há nenhuma câmera conectada!");
+    		alert.show();
     	}
-    	
-    	String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\capture.png";
-    	Imgcodecs.imwrite(saveLocation, matrix);
-    	image.setImage(writableImage);
-    	imgPath = saveLocation;	
-		labelSC.setText(null);
-		
-		capture.release();
     }
 
     @FXML
@@ -135,9 +164,53 @@ public class MainScreenController {
     	try {
 			main.settings();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    @FXML
+    void start(ActionEvent event){
+    	stopButton.setDisable(false);
+    	startButton.setDisable(true);
+    	imgCapture.setDisable(true);
+    	selectImage.setDisable(true);
+    	detect.setDisable(true);
+    	fileMenu.setDisable(true);
+    	editMenu.setDisable(true);
+    	settingsMenu.setDisable(true);
+    	    	
+    	Thread t = new Thread(new Runnable(){
+    		@Override
+    		public void run(){
+    			isCapturing = true;
+    			while(isCapturing){
+    				capture(event);
+    				detect(event);
+    	        	  
+    				try {
+    					Thread.sleep(minuteCb.getSelectionModel().getSelectedItem() * 60000);
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+    			}
+    		}
+    	});
+    	t.start();
+    }
+
+    @FXML
+    void stop(ActionEvent event) {
+    	isCapturing = false;
+    	
+    	stopButton.setDisable(true);
+    	startButton.setDisable(false);
+    	imgCapture.setDisable(false);
+    	selectImage.setDisable(false);
+    	detect.setDisable(false);
+    	fileMenu.setDisable(false);
+    	editMenu.setDisable(false);
+    	settingsMenu.setDisable(false);
+    	
     }
 
     @FXML
@@ -147,11 +220,22 @@ public class MainScreenController {
         try {
 			dataset.readData();
 		} catch (IOException e) {
+			Alert alert = new Alert(AlertType.ERROR, "Erro ao ler dataset!");
+			alert.show();
 			e.printStackTrace();
 		}
         
         datasetOp = new DatasetOp(dataset);
         imgPath = null;
         
+        List<Integer> minutes = new ArrayList<Integer>();
+        minutes.add(1);
+        minutes.add(5);
+        minutes.add(10);
+        minutes.add(20);
+        minutes.add(30);
+        
+        minuteCb.setItems(FXCollections.observableArrayList(minutes));
+        minuteCb.getSelectionModel().selectFirst();
     }
 }

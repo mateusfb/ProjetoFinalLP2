@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.opencv.core.Core;
 
@@ -17,7 +18,7 @@ public class Detector extends Application {
 	private Stage initial;
 	private Pane mainScreen;
 	private MainScreenController mSController;
-	private Pane settingScreen;
+	public Pane settingScreen;
 	private SettingsScreenController sSController;
 	
 	@Override
@@ -53,6 +54,8 @@ public class Detector extends Application {
 			
 		Stage stage = new Stage();
 		stage.setTitle("Preferências");
+		stage.initModality(Modality.WINDOW_MODAL);
+	    stage.initOwner(this.initial);
 		Scene scene = new Scene(settingScreen);
 		stage.setScene(scene);
 		stage.show();
