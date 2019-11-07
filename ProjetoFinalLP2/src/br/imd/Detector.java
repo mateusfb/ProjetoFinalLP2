@@ -32,6 +32,7 @@ public class Detector extends Application {
 			
 		Scene scene = new Scene(mainScreen);
 		initial.setScene(scene);
+		initial.resizableProperty().setValue(false);
 		initial.show();
 		
 		mSController = loader.getController();

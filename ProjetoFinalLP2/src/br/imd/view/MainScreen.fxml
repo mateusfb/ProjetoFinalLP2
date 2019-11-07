@@ -9,22 +9,26 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.imd.controller.MainScreenController">
    <children>
-      <Button fx:id="selectImage" layoutX="451.0" layoutY="307.0" mnemonicParsing="false" onAction="#selectImage" text="Carregar imagem" />
-      <Button fx:id="detect" layoutX="475.0" layoutY="350.0" mnemonicParsing="false" onAction="#detect" text="Detectar" />
-      <ImageView fx:id="image" fitHeight="197.0" fitWidth="199.0" layoutX="406.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="selectImage" layoutX="451.0" layoutY="280.0" mnemonicParsing="false" onAction="#selectImage" text="Carregar imagem" />
+      <Button fx:id="detect" layoutX="475.0" layoutY="323.0" mnemonicParsing="false" onAction="#detect" text="Detectar" />
       <Label fx:id="labelSC" layoutX="444.0" layoutY="124.0" text="Selecione uma imagem" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="200.0" layoutX="187.0" layoutY="186.0" stroke="BLACK" strokeType="INSIDE" width="7.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="167.0" layoutX="143.0" layoutY="77.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" width="96.0" />
-      <Circle fx:id="greenLight" fill="GRAY" layoutX="191.0" layoutY="120.0" radius="30.0" stroke="#545454" strokeType="INSIDE" strokeWidth="3.0" />
-      <Circle fx:id="redLight" fill="GRAY" layoutX="191.0" layoutY="191.0" radius="30.0" stroke="#575757" strokeType="INSIDE" strokeWidth="3.0" />
+      <VBox alignment="CENTER" layoutX="407.0" layoutY="33.0" prefHeight="201.0" prefWidth="201.0">
+         <children>
+            <ImageView fx:id="image" fitHeight="190.0" fitWidth="194.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </VBox>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="176.0" layoutX="65.0" layoutY="103.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" width="282.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="48.0" layoutX="79.0" layoutY="216.0" stroke="BLACK" strokeType="INSIDE" width="254.0" />
+      <Circle fx:id="greenLight" layoutX="267.0" layoutY="191.0" radius="11.0" stroke="#545454" strokeType="INSIDE" />
+      <Circle fx:id="redLight" layoutX="297.0" layoutY="191.0" radius="11.0" stroke="#575757" strokeType="INSIDE" />
       <Separator layoutX="378.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="480.0" prefWidth="7.0" />
-      <Polygon layoutX="191.0" layoutY="396.0" points="-50.0, 40.0, 50.0, 40.0, 0.0, -60.0" scaleX="0.3" scaleY="0.3" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
       <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="640.0">
         <menus>
           <Menu fx:id="fileMenu" mnemonicParsing="false" text="Arquivo">
@@ -45,10 +49,20 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Button fx:id="imgCapture" layoutX="451.0" layoutY="267.0" mnemonicParsing="false" onAction="#capture" text="Capturar imagem" />
-      <Label layoutX="405.0" layoutY="393.0" text="Detectar a cada                       minutos" />
-      <ComboBox fx:id="minuteCb" layoutX="499.0" layoutY="389.0" prefHeight="25.0" prefWidth="60.0" />
-      <Button fx:id="startButton" layoutX="451.0" layoutY="429.0" mnemonicParsing="false" onAction="#start" text="Iniciar" />
-      <Button fx:id="stopButton" disable="true" layoutX="517.0" layoutY="429.0" mnemonicParsing="false" onAction="#stop" text="Parar" />
+      <Button fx:id="imgCapture" layoutX="451.0" layoutY="240.0" mnemonicParsing="false" onAction="#capture" text="Capturar imagem" />
+      <Label layoutX="405.0" layoutY="366.0" text="Detectar a cada                       minutos" />
+      <ComboBox fx:id="minuteCb" layoutX="499.0" layoutY="362.0" prefHeight="25.0" prefWidth="60.0" />
+      <Button fx:id="startButton" layoutX="451.0" layoutY="402.0" mnemonicParsing="false" onAction="#start" text="Iniciar" />
+      <Button fx:id="stopButton" disable="true" layoutX="517.0" layoutY="402.0" mnemonicParsing="false" onAction="#stop" text="Parar" />
+      <Rectangle fx:id="acPanel" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="48.0" layoutX="79.0" layoutY="221.0" stroke="BLACK" strokeType="INSIDE" width="254.0" />
+      <VBox alignment="CENTER" layoutX="97.0" layoutY="305.0" prefHeight="104.0" prefWidth="219.0">
+         <children>
+            <Label fx:id="onOffLabel" text="..." textFill="#686868" wrapText="true">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
    </children>
 </Pane>

@@ -32,6 +32,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
 public class MainScreenController {
@@ -87,6 +88,12 @@ public class MainScreenController {
     @FXML
     private Menu settingsMenu;
     
+    @FXML
+    private Label onOffLabel;
+    
+    @FXML
+    private Rectangle acPanel;
+    
     public DatasetOp getDatasetOp() {
     	return datasetOp;
     }
@@ -103,10 +110,16 @@ public class MainScreenController {
     		
     		if(datasetOp.isPerson(imgAtributes)) {
     			greenLight.setFill(Color.GREEN);
-    			redLight.setFill(Color.GRAY);
+    			redLight.setFill(Color.BLACK);
+    			onOffLabel.setText("LIGADO");
+    			onOffLabel.setTextFill(Color.GREEN);
+    			acPanel.setHeight(17);
     		} else {
     			redLight.setFill(Color.RED);
-    			greenLight.setFill(Color.GRAY);
+    			greenLight.setFill(Color.BLACK);
+    			onOffLabel.setText("DESLIGADO");
+    			onOffLabel.setTextFill(Color.RED);
+    			acPanel.setHeight(48);
     		}
     	}
     }
@@ -133,8 +146,7 @@ public class MainScreenController {
     	        String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\capture.png";
     	     	Imgcodecs.imwrite(saveLocation, matrix);
     	     	image.setImage(writableImage);
-    	     	imgPath = saveLocation;	
-    	 		labelSC.setText(null);
+    	     	imgPath = saveLocation;
 
     	 		capture.release();
     	     }
