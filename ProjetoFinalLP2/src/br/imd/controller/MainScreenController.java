@@ -17,6 +17,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -175,6 +176,7 @@ public class MainScreenController {
     	if(selectedFile != null) { //Checando se alguma imagem foi selecionada
     		image.setImage(new Image(selectedFile.toURI().toString())); //Setando a imagem na interface
     		imgPath = selectedFile.getAbsolutePath(); //Setando o caminho da imagem
+    		labelSC = null;
     	}
     }
     
@@ -206,16 +208,27 @@ public class MainScreenController {
     			isCapturing = true;
     			while(isCapturing){ //Loop funciona até que a flag isCapturing seja false
     				capture(event); //Capturando imagem
-    				detect(event); //Detectando
+    				Platform.runLater(new Runnable() {
+    				    @Override
+    				    public void run() {
+    				    	detect(event); //Detectando
+    				    }
+    				});
+    				
     	        	  
     				try {
-    					Thread.sleep(minuteCb.getSelectionModel().getSelectedItem() * 60000); //Esperando pelo tempo determinado pelo usuário
+    					int i = 0;
+    					while(i < minuteCb.getSelectionModel().getSelectedItem() * 60000 && isCapturing) { //Checa a cada 10 segundos se a thread ainda está viva
+    						Thread.sleep(10000);
+    						i += 10000;
+    					}
     				} catch (InterruptedException e) {
     					e.printStackTrace();
     				}
     			}
     		}
     	});
+    	t.setDaemon(true);
     	t.start();
     }
 
