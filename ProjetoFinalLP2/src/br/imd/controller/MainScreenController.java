@@ -35,13 +35,14 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 
+/**Classe de controle da tela principal*/
 public class MainScreenController {
 	
-	private volatile boolean isCapturing;
-	private Dataset dataset;
-	private DatasetOp datasetOp;
-	private String imgPath;
-	private Detector main;
+	private volatile boolean isCapturing; //flag da thread de captura por tempo
+	private Dataset dataset; //Dataset com as instâncias de imagem
+	private DatasetOp datasetOp; //Operador de dataset
+	private String imgPath; //Caminho para a imagem a ser analisada
+	private Detector main; //Referência para a aplicação principal
 	
     @FXML
     private ResourceBundle resources;
@@ -94,10 +95,16 @@ public class MainScreenController {
     @FXML
     private Rectangle acPanel;
     
+	/**
+	 * @return DatasetOp - Operador do dataset
+	 */
     public DatasetOp getDatasetOp() {
     	return datasetOp;
     }
     
+	/**
+	 * @param main Detector - Aplicação principal
+	 * */
     public void setMainApp(Detector main) {
     	this.main = main;
     }
@@ -105,9 +112,10 @@ public class MainScreenController {
     @FXML
     void detect(ActionEvent event) {
     	if(imgPath != null) {
-    		HogExtractor hog = new HogExtractor(imgPath);
-    		float[] imgAtributes = hog.extract();
+    		HogExtractor hog = new HogExtractor(imgPath); 
+    		float[] imgAtributes = hog.extract(); //Extraindo e armazenando atributos da imagem
     		
+    		//Checando se a imagem é de pessoa ou não e reproduzindo resultado na interface
     		if(datasetOp.isPerson(imgAtributes)) {
     			greenLight.setFill(Color.GREEN);
     			redLight.setFill(Color.BLACK);
@@ -129,20 +137,22 @@ public class MainScreenController {
     	VideoCapture capture = new VideoCapture(0);
     	WritableImage writableImage = null;
     	
-    	Mat matrix = new Mat();
-    	capture.read(matrix);
+    	Mat matrix = new Mat(); //Matriz da imagem
     	
-    	if(capture.isOpened()) {
-    		if(capture.read(matrix)) {
+    	if(capture.isOpened()) { //Checando se a captura foi inicializada com sucesso
+    		if(capture.read(matrix)) { //Capturando o próximo frame
+    			//Criando uma BufferedImage a partir da matriz
     			BufferedImage bufferedImage = new BufferedImage(matrix.width(), matrix.height(), BufferedImage.TYPE_3BYTE_BGR);
     			
     			WritableRaster raster = bufferedImage.getRaster();
     			DataBufferByte dataBuffer = (DataBufferByte) raster.getDataBuffer();
     	        byte[] data = dataBuffer.getData();
     	        matrix.get(0, 0, data);
-    	       
-    	 		writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
     	        
+    	        //Criando uma WritableImage
+    	        writableImage = SwingFXUtils.toFXImage(bufferedImage, null);
+    	        
+    	        //Salvando a imagem
     	        String saveLocation = new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\capture.png";
     	     	Imgcodecs.imwrite(saveLocation, matrix);
     	     	image.setImage(writableImage);
@@ -158,16 +168,13 @@ public class MainScreenController {
 
     @FXML
     void selectImage(ActionEvent event) {
-    	FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png"));
+    	FileChooser fc = new FileChooser(); //Instanciando o FileChooser
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG", "*.png")); //Adicionando o filtro para selecionar apenas imagens em PNG
     	File selectedFile = fc.showOpenDialog(null);
     	
-    	if(selectedFile != null) {
-    		image.setImage(new Image(selectedFile.toURI().toString()));
-    		imgPath = selectedFile.getAbsolutePath();
-    		labelSC.setText(null);
-    	} else {
-    		
+    	if(selectedFile != null) { //Checando se alguma imagem foi selecionada
+    		image.setImage(new Image(selectedFile.toURI().toString())); //Setando a imagem na interface
+    		imgPath = selectedFile.getAbsolutePath(); //Setando o caminho da imagem
     	}
     }
     
@@ -182,6 +189,7 @@ public class MainScreenController {
     
     @FXML
     void start(ActionEvent event){
+    	//Hanilitando o botão Parar e desabilitando os demais
     	stopButton.setDisable(false);
     	startButton.setDisable(true);
     	imgCapture.setDisable(true);
@@ -190,17 +198,18 @@ public class MainScreenController {
     	fileMenu.setDisable(true);
     	editMenu.setDisable(true);
     	settingsMenu.setDisable(true);
-    	    	
+    	
+    	//Iniciando uma thread para fazer a captura e detecção das imagens
     	Thread t = new Thread(new Runnable(){
     		@Override
-    		public void run(){
+    		public void run(){ 
     			isCapturing = true;
-    			while(isCapturing){
-    				capture(event);
-    				detect(event);
+    			while(isCapturing){ //Loop funciona até que a flag isCapturing seja false
+    				capture(event); //Capturando imagem
+    				detect(event); //Detectando
     	        	  
     				try {
-    					Thread.sleep(minuteCb.getSelectionModel().getSelectedItem() * 60000);
+    					Thread.sleep(minuteCb.getSelectionModel().getSelectedItem() * 60000); //Esperando pelo tempo determinado pelo usuário
     				} catch (InterruptedException e) {
     					e.printStackTrace();
     				}
@@ -212,8 +221,9 @@ public class MainScreenController {
 
     @FXML
     void stop(ActionEvent event) {
-    	isCapturing = false;
+    	isCapturing = false; //Setando a flag para false
     	
+    	//Desabilitando o botão Parar e habilitando os demais
     	stopButton.setDisable(true);
     	startButton.setDisable(false);
     	imgCapture.setDisable(false);
@@ -227,17 +237,17 @@ public class MainScreenController {
 
     @FXML
     void initialize() {
-        dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv");
+        dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv"); //Instanciando o dataset
         
         try {
-			dataset.readData();
+			dataset.readData(); //Lendo o dataset
 		} catch (IOException e) {
 			Alert alert = new Alert(AlertType.ERROR, "Erro ao ler dataset!");
 			alert.show();
 			e.printStackTrace();
 		}
         
-        datasetOp = new DatasetOp(dataset);
+        datasetOp = new DatasetOp(dataset); //Instanciando o operador do dataset
         imgPath = null;
         
         List<Integer> minutes = new ArrayList<Integer>();
@@ -247,6 +257,7 @@ public class MainScreenController {
         minutes.add(20);
         minutes.add(30);
         
+        //Inicializando o Combo box
         minuteCb.setItems(FXCollections.observableArrayList(minutes));
         minuteCb.getSelectionModel().selectFirst();
     }

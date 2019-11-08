@@ -1,10 +1,15 @@
 package br.imd.model;
 
+/**Classe para instâncias de imagem, onde serão contidos os atributos e rótulos das mesmas.*/
 public class ImageInstance {
 	
-	private String label;
-	private float[] atributes;
+	private String label; //Rótulo da imagem
+	private float[] atributes; //Vetor com os atributos da imagem
 
+	/**Construtor de ImageInstance
+	 * @param label String - Rótulo da imagem
+	 * @param atributes float[] - Atributos da imagem
+	 * */
 	public ImageInstance(String label, float[] atributes) {
 		super();
 		this.label = label;
@@ -12,28 +17,28 @@ public class ImageInstance {
 	}
 
 	/**
-	 * @return the label
+	 * @return String - Rótulo da imagem
 	 */
 	public String getLabel() {
 		return label;
 	}
 
 	/**
-	 * @param label the label to set
+	 * @param label String - Rótulo da imagem
 	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
 	/**
-	 * @return the atributes
+	 * @return float[] - Atributos da imagem
 	 */
 	public float[] getAtributes() {
 		return atributes;
 	}
 
 	/**
-	 * @param atributes the atributes to set
+	 * @param atributes float[] - Atributos da imagem
 	 */
 	public void setAtributes(float[] atributes) {
 		this.atributes = atributes;

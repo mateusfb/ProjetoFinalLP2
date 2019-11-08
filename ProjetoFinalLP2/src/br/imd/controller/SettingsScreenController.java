@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class SettingsScreenController {
 
-	private Detector main;
+	private Detector main; //Referência à aplicação principal
 	
     @FXML
     private RadioButton euclidianCb;
@@ -36,6 +36,9 @@ public class SettingsScreenController {
     @FXML
     private TextField kField;
     
+	/**
+	 * @param main Detector - Aplicação principal
+	 * */
     public void setMainApp(Detector main) {
     	this.main = main;
     }
@@ -45,9 +48,9 @@ public class SettingsScreenController {
     	RadioButton distance = (RadioButton) distances.getSelectedToggle();
     	int newK = 0;
     	
-    	if(!(kField.getText().equals(""))) {
+    	if(!(kField.getText().equals(""))) { //Checando se algo foi escrito no TextField
     		try {
-    			newK = Integer.parseInt(kField.getText());
+    			newK = Integer.parseInt(kField.getText()); //Tenta converter o texto do TextField para int
     		}catch(NumberFormatException e) {
     			Alert alert = new Alert(AlertType.ERROR, "Valor de K inválido!");
     			alert.show();
@@ -57,19 +60,19 @@ public class SettingsScreenController {
 
     	
     	if(distance != null) {
-    		main.getMSController().getDatasetOp().setDistance(distance.getText());
+    		main.getMSController().getDatasetOp().setDistance(distance.getText()); //Seta a distância
     	}
     	
     	if(newK > 0 && newK < 100) {
-    		main.getMSController().getDatasetOp().setK(newK);
+    		main.getMSController().getDatasetOp().setK(newK); //Seta o novo valor de k
     	}
     }
     
     @FXML
     void applyClose(ActionEvent event) {
-    	this.apply(event);
+    	this.apply(event); //Aplica as mudanças
     	
     	Stage stage = (Stage) applyCloseButton.getScene().getWindow();
-    	stage.close();
+    	stage.close(); //Fecha a janela
     }
 }

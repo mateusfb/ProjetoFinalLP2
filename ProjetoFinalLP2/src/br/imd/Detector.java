@@ -13,13 +13,14 @@ import org.opencv.core.Core;
 import br.imd.controller.MainScreenController;
 import br.imd.controller.SettingsScreenController;
 
+/**Classe principal da aplicação*/
 public class Detector extends Application {
 
-	private Stage initial;
-	private Pane mainScreen;
-	private MainScreenController mSController;
-	public Pane settingScreen;
-	private SettingsScreenController sSController;
+	private Stage initial; //Stage inicial
+	private Pane mainScreen; //Tela Principal
+	private MainScreenController mSController; //Controlador da tela principal
+	public Pane settingScreen; //Tela de configurações
+	private SettingsScreenController sSController; //Controlador da tela de configurações
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException{
