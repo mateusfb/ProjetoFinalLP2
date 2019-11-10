@@ -28,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -95,6 +96,9 @@ public class MainScreenController {
     
     @FXML
     private Rectangle acPanel;
+    
+    @FXML
+    private ProgressBar progressBar;
     
 	/**
 	 * @return DatasetOp - Operador do dataset
@@ -191,8 +195,9 @@ public class MainScreenController {
     
     @FXML
     void start(ActionEvent event){
-    	//Hanilitando o botão Parar e desabilitando os demais
+    	//Habilitando o botão Parar e desabilitando os demais
     	stopButton.setDisable(false);
+    	minuteCb.setDisable(true);
     	startButton.setDisable(true);
     	imgCapture.setDisable(true);
     	selectImage.setDisable(true);
@@ -205,8 +210,12 @@ public class MainScreenController {
     	Thread t = new Thread(new Runnable(){
     		@Override
     		public void run(){ 
+    	    	double progress;
     			isCapturing = true;
+
     			while(isCapturing){ //Loop funciona até que a flag isCapturing seja false
+    				progress = 0;
+    				
     				capture(event); //Capturando imagem
     				Platform.runLater(new Runnable() {
     				    @Override
@@ -219,6 +228,8 @@ public class MainScreenController {
     				try {
     					int i = 0;
     					while(i < minuteCb.getSelectionModel().getSelectedItem() * 60000 && isCapturing) { //Checa a cada 10 segundos se a thread ainda está viva
+    						progress += 1.0 / (minuteCb.getSelectionModel().getSelectedItem() * 6);
+    						progressBar.setProgress(progress);
     						Thread.sleep(10000);
     						i += 10000;
     					}
@@ -235,9 +246,11 @@ public class MainScreenController {
     @FXML
     void stop(ActionEvent event) {
     	isCapturing = false; //Setando a flag para false
+    	progressBar.setProgress(0);
     	
     	//Desabilitando o botão Parar e habilitando os demais
     	stopButton.setDisable(true);
+    	minuteCb.setDisable(false);
     	startButton.setDisable(false);
     	imgCapture.setDisable(false);
     	selectImage.setDisable(false);
@@ -250,12 +263,13 @@ public class MainScreenController {
 
     @FXML
     void initialize() {
-        dataset = new Dataset(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv"); //Instanciando o dataset
+        dataset = new Dataset(); //Instanciando o dataset
+        dataset.setDatasetLocation(new File("").getAbsolutePath() + "\\src\\br\\imd\\resources\\dataset.csv");
         
         try {
 			dataset.readData(); //Lendo o dataset
 		} catch (IOException e) {
-			Alert alert = new Alert(AlertType.ERROR, "Erro ao ler dataset!");
+			Alert alert = new Alert(AlertType.ERROR, "Erro ao ler dataset!\nSelecione um caminho válido para o dataset em Configurações>Preferências ");
 			alert.show();
 			e.printStackTrace();
 		}

@@ -14,9 +14,9 @@ public class Dataset {
 	/**Construtor de Dataset
 	 * @param datasetLocation String - Caminho para o dataset
 	 * */
-	public Dataset(String datasetLocation) {
+	public Dataset() {
 		this.dataset = new ArrayList<ImageInstance>();
-		this.datasetLocation = datasetLocation;
+		this.datasetLocation = null;
 	}
 
 	/**

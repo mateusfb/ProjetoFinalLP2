@@ -1,5 +1,7 @@
 package br.imd.controller;
 
+import java.io.File;
+
 import br.imd.Detector;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class SettingsScreenController {
@@ -35,6 +38,12 @@ public class SettingsScreenController {
 
     @FXML
     private TextField kField;
+    
+    @FXML
+    private TextField datasetPathField;
+
+    @FXML
+    private Button browseButton;
     
 	/**
 	 * @param main Detector - Aplicação principal
@@ -74,5 +83,18 @@ public class SettingsScreenController {
     	
     	Stage stage = (Stage) applyCloseButton.getScene().getWindow();
     	stage.close(); //Fecha a janela
+    }
+    
+    @FXML
+    void browseDataset(ActionEvent event) {
+    	FileChooser fc = new FileChooser(); //Instanciando o FileChooser
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV", "*.csv")); //Adicionando o filtro para selecionar apenas arquivos csv
+    	File selectedFile = fc.showOpenDialog(null);
+    	
+    	
+    	if(selectedFile != null) { //Checando se algum arquivo foi selecionado
+        	datasetPathField.setText(selectedFile.getAbsolutePath());
+    		main.getMSController().getDatasetOp().getOperated().setDatasetLocation(selectedFile.getAbsolutePath());
+    	}
     }
 }

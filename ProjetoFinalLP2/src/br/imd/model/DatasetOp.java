@@ -5,17 +5,24 @@ import java.util.Arrays;
 /**Classe com os métodos operadores do dataset*/
 public class DatasetOp {
 
-	private Dataset dataset; //Dataset a ser operado
+	private Dataset operated; //Dataset a ser operado
 	private String distance; //Método de medição de distância a ser utilizado
 	private int k; //Número de objetos mais próximos a comparar
 	
 	/**Construtor de DatasetOp
 	 * @param dataset Dataset - Dataset a ser operado
 	 * */
-	public DatasetOp(Dataset dataset){
-		this.dataset = dataset;
+	public DatasetOp(Dataset operated){
+		this.operated = operated;
 		this.distance = "Euclidiana";
 		this.k = 5;
+	}
+	
+	/**
+	 * @return Dataset - Dataset operado
+	 */
+	public Dataset getOperated() {
+		return operated;
 	}
 	
 	/**
@@ -38,16 +45,16 @@ public class DatasetOp {
 	 * */
 	public boolean isPerson(float[] imgAtributes) {
 		int[] minIndex = new int[k]; //Vetor de índices dos k pontos mais próximos à imagem
-		double[] distances = new double[100]; //Vetor de todas as distancias calculadas entre a imagem e o dataset
+		double[] distances = new double[operated.getDataset().size()]; //Vetor de todas as distancias calculadas entre a imagem e o dataset
 		double maxDistance = 0; //Maior distância encontrada
 		int personCount = 0; //Contador para as ocorrências de pessoa
 		int notPersonCount = 0; //Contador para não ocorrência de pessoa
 		Distance method = null;
 		
-		System.out.println("Valoe de K: " + k);
+		System.out.println("Valor de K: " + k);
 		System.out.println("Método de medição de distância: " + distance);
 		
-		for(int i = 0; i < 100; i++) { //Calculando e armazenando todas as distâncias
+		for(int i = 0; i < operated.getDataset().size(); i++) { //Calculando e armazenando todas as distâncias
 			switch(this.distance){
 				case "Euclidiana":
 					method = new EuclideanD();
@@ -60,7 +67,7 @@ public class DatasetOp {
 					break;
 			}
 			
-			distances[i] = method.getDistance(imgAtributes, dataset.getDataset().get(i).getAtributes());
+			distances[i] = method.getDistance(imgAtributes, operated.getDataset().get(i).getAtributes());
 			
 			if(distances[i] > maxDistance) {
 				maxDistance = distances[i]; //Armazenando a maior distância
@@ -74,9 +81,9 @@ public class DatasetOp {
 			minIndex[i] = FindMinimumIndex(distances); //Armazenando os índices das menores distâncias
 			distances[minIndex[i]] = maxDistance; //Trocando o valor da menor distancia para a da maior, para não armazenar o mesmo valor mais de uma vez
 			
-			System.out.println(dataset.getDataset().get(minIndex[i]).getLabel());
+			System.out.println(operated.getDataset().get(minIndex[i]).getLabel());
 			
-			if(dataset.getDataset().get(minIndex[i]).getLabel().equals("person")) { //Contando as ocorrências de pessoa
+			if(operated.getDataset().get(minIndex[i]).getLabel().equals("person")) { //Contando as ocorrências de pessoa
 				personCount++;
 			} else {
 				notPersonCount++;
@@ -88,7 +95,7 @@ public class DatasetOp {
 		if(personCount > notPersonCount) {
 			return true;
 		} else if(personCount == notPersonCount) {
-			if(dataset.getDataset().get(minIndex[0]).getLabel().equals("person")) {
+			if(operated.getDataset().get(minIndex[0]).getLabel().equals("person")) {
 				return true;
 			}
 		}
