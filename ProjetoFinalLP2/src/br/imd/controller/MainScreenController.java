@@ -176,7 +176,7 @@ public class MainScreenController {
     	if(selectedFile != null) { //Checando se alguma imagem foi selecionada
     		image.setImage(new Image(selectedFile.toURI().toString())); //Setando a imagem na interface
     		imgPath = selectedFile.getAbsolutePath(); //Setando o caminho da imagem
-    		labelSC = null;
+    		labelSC.setText(null);;
     	}
     }
     

@@ -27,13 +27,6 @@ public class Dataset {
 	}
 
 	/**
-	 * @return String - Caminho para o dataset
-	 */
-	public String getDatasetLocation() {
-		return datasetLocation;
-	}
-
-	/**
 	 * @param datasetLocation String - Caminho para o dataset
 	 */
 	public void setDatasetLocation(String datasetLocation) {

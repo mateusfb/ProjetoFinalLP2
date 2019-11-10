@@ -24,25 +24,9 @@ public class ImageInstance {
 	}
 
 	/**
-	 * @param label String - Rótulo da imagem
-	 */
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	/**
 	 * @return float[] - Atributos da imagem
 	 */
 	public float[] getAtributes() {
 		return atributes;
 	}
-
-	/**
-	 * @param atributes float[] - Atributos da imagem
-	 */
-	public void setAtributes(float[] atributes) {
-		this.atributes = atributes;
-	}
-	
-	
 }

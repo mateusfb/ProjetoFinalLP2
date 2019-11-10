@@ -1,5 +1,7 @@
 package br.imd.model;
 
+import java.util.Arrays;
+
 /**Classe com os métodos operadores do dataset*/
 public class DatasetOp {
 
@@ -24,65 +26,13 @@ public class DatasetOp {
 	}
 	
 	/**
-	 * @return int - Valor de k
-	 */
-	public int getK() {
-		return this.k;
-	}
-	
-	/**
 	 * @param k int - Valor de k
 	 */
 	public void setK(int k) {
 		this.k = k;
 	}
 	
-	/**Método euclidiano para a medição de distância de dois vetores
-	 * @param p1 float[] - Primeiro vetor de valores
-	 * @param p2 float[] - Segundo vetor de valores
-	 * @return double - Distância euclidiana entre os vetores
-	 * */
-	public double euclideanD(float[] p1, float[] p2) {
-		double sum = 0;
-		
-		for(int i = 0; i < p2.length; i++) {
-			sum += Math.pow((p1[i] - p2[i]), 2);
-		}
-		
-		return Math.sqrt(sum);
-	}
-	
-	/**Método de manhattan para a medição de distância de dois vetores
-	 * @param p1 float[] - Primeiro vetor de valores
-	 * @param p2 float[] - Segundo vetor de valores
-	 * @return double - Distância de manhattan entre os vetores
-	 * */
-	public double manhattanD(float[] p1, float[] p2) {
-		double ds = 0;
-		
-		for(int i = 0; i < p2.length; i++) {
-			ds += Math.abs(p1[i] - p2[i]);
-		}
-		
-		return ds;
-	}
-	
-	/**Método de chebyshev para a medição de distância de dois vetores
-	 * @param p1 float[] - Primeiro vetor de valores
-	 * @param p2 float[] - Segundo vetor de valores
-	 * @return double - Distância de chebyshev entre os vetores
-	 * */
-	public double chebyshevD(float[] p1, float[] p2) {
-		double ds = 0;
-		
-		for(int i = 0; i < p2.length; i++) {
-			ds = Math.max(ds, Math.abs(p1[i]-p2[i]));
-		} 
-		
-		return ds;
-	}
-	
-	/**Método que detecta se uma imagem é de uma pessoa ou não
+	/**Método que detecta se uma imagem possui pessoa ou não, através do knn
 	 * @param imgAtributes float[] - Vetor de atributos da imagem a ser analisada
 	 * @return boolean - true se é pessoa, ou false caso contrário
 	 * */
@@ -91,35 +41,56 @@ public class DatasetOp {
 		double[] distances = new double[100]; //Vetor de todas as distancias calculadas entre a imagem e o dataset
 		double maxDistance = 0; //Maior distância encontrada
 		int personCount = 0; //Contador para as ocorrências de pessoa
+		int notPersonCount = 0; //Contador para não ocorrência de pessoa
+		Distance method = null;
+		
+		System.out.println("Valoe de K: " + k);
+		System.out.println("Método de medição de distância: " + distance);
 		
 		for(int i = 0; i < 100; i++) { //Calculando e armazenando todas as distâncias
 			switch(this.distance){
 				case "Euclidiana":
-					distances[i] = euclideanD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					method = new EuclideanD();
 					break;
 				case "Manhattan":
-					distances[i] = manhattanD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					method = new ManhattanD();
 					break;
 				case "Chebyshev":
-					distances[i] = chebyshevD(imgAtributes, dataset.getDataset().get(i).getAtributes());
+					method = new ChebyshevD();
 					break;
 			}
+			
+			distances[i] = method.getDistance(imgAtributes, dataset.getDataset().get(i).getAtributes());
+			
 			if(distances[i] > maxDistance) {
 				maxDistance = distances[i]; //Armazenando a maior distância
 			}
 		}
 		
+		System.out.println("Distâncias: " + Arrays.toString(distances));
+		System.out.println("-Rótulos mais próximos-");
+		
 		for(int i = 0; i < k; i++) { 
 			minIndex[i] = FindMinimumIndex(distances); //Armazenando os índices das menores distâncias
 			distances[minIndex[i]] = maxDistance; //Trocando o valor da menor distancia para a da maior, para não armazenar o mesmo valor mais de uma vez
 			
+			System.out.println(dataset.getDataset().get(minIndex[i]).getLabel());
+			
 			if(dataset.getDataset().get(minIndex[i]).getLabel().equals("person")) { //Contando as ocorrências de pessoa
 				personCount++;
+			} else {
+				notPersonCount++;
 			}
 		}
 		
-		if(personCount > Math.floor(k/2)) {
+		System.out.println("-----------------------");
+		
+		if(personCount > notPersonCount) {
 			return true;
+		} else if(personCount == notPersonCount) {
+			if(dataset.getDataset().get(minIndex[0]).getLabel().equals("person")) {
+				return true;
+			}
 		}
 		
 		return false;

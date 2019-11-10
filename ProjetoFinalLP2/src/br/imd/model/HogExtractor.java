@@ -21,20 +21,6 @@ public class HogExtractor {
 		this.imgLocation = imgLocation;
 	}	
 
-	/**
-	 * @return String - Caminho da imagem
-	 */
-	public String getImgLocation() {
-		return imgLocation;
-	}
-
-	/**
-	 * @param label String - Caminho da imagem
-	 */
-	public void setImgLocation(String imgLocation) {
-		this.imgLocation = imgLocation;
-	}
-
 	/**Método extrator dos atributos de uma imagem
 	 * @return float[] - Vetor com os atributos extraídos da imagem*/
 	public float[] extract() {
